@@ -38,10 +38,25 @@ const MENU_CATS = [
   }).join("");
 
   const header = `
-  <div class="preloader">
-    <div class="pl-logo">GO<span>TRIX</span></div>
-    <div class="pl-bar"><i></i></div>
-    <div class="pl-count">000 / 100</div>
+  <div class="preloader" aria-label="Carregando">
+    <div class="pl-moto">
+      <svg viewBox="0 0 126 74" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+        <g class="pl-speed">
+          <line x1="2" y1="26" x2="20" y2="26"/>
+          <line x1="-2" y1="38" x2="18" y2="38"/>
+          <line x1="4" y1="50" x2="20" y2="50"/>
+        </g>
+        <circle class="pl-wheel-tire" cx="30" cy="60" r="11"/>
+        <circle class="pl-wheel-rim tras" cx="30" cy="60" r="6"/>
+        <circle class="pl-wheel-tire" cx="96" cy="60" r="11"/>
+        <circle class="pl-wheel-rim frente" cx="96" cy="60" r="6"/>
+        <path stroke="#101013" d="M41 52h34"/>
+        <path stroke="#101013" d="M75 52 90 20"/>
+        <path stroke="#101013" d="M84 18h13"/>
+        <path stroke="#101013" d="M41 52c-6 0-9-5-9-10"/>
+      </svg>
+      <div class="pl-road"></div>
+    </div>
   </div>
 
   <header class="site-header">

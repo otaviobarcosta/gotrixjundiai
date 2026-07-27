@@ -6,12 +6,13 @@
 
 const WHATS_NUMBER = "5511999999999"; // TROCAR pelo número da loja de Jundiaí
 const ENDERECO = {
-  rua: "Rua Nove de Julho, 123", // TROCAR pelo número certo
-  bairro: "Centro",              // CONFIRMAR o bairro
-  cidade: "Jundiaí - SP"
+  rua: "R. Abílio Figueiredo, 192",
+  bairro: "Anhangabaú",
+  cidade: "Jundiaí - SP",
+  cep: "13208-140"
 };
 function enderecoCompleto() {
-  return `${ENDERECO.rua} - ${ENDERECO.bairro}, ${ENDERECO.cidade}`;
+  return `${ENDERECO.rua} - ${ENDERECO.bairro}, ${ENDERECO.cidade}, ${ENDERECO.cep}`;
 }
 const UTM = "utm_source=site&utm_medium=cta&utm_campaign=gotrix_jundiai";
 

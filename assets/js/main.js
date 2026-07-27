@@ -11,21 +11,21 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 (function preloader() {
   const pl = document.querySelector(".preloader");
   if (!pl) return;
-  const bar = pl.querySelector(".pl-bar i");
-  const count = pl.querySelector(".pl-count");
-  let p = 0;
-  const tick = setInterval(() => {
-    p = Math.min(100, p + Math.random() * 22);
-    bar.style.width = p + "%";
-    count.textContent = String(Math.floor(p)).padStart(3, "0") + " / 100";
-    if (p >= 100) {
-      clearInterval(tick);
-      setTimeout(() => {
-        pl.classList.add("done");
-        document.dispatchEvent(new Event("gtx:ready"));
-      }, 250);
-    }
-  }, 90);
+  let disparado = false;
+  const done = () => {
+    if (disparado) return;
+    disparado = true;
+    pl.classList.add("done");
+    document.dispatchEvent(new Event("gtx:ready"));
+  };
+  // tempo mínimo pra animação respirar + espera o load; teto de segurança de 2,5s
+  const minimo = new Promise(r => setTimeout(r, 1100));
+  const carregou = new Promise(r => {
+    if (document.readyState === "complete") r();
+    else window.addEventListener("load", r, { once: true });
+  });
+  Promise.all([minimo, carregou]).then(() => setTimeout(done, 120));
+  setTimeout(done, 2500);
 })();
 
 /* ---------- custom cursor ---------- */
