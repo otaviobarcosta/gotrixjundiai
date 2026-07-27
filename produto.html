@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veículo | Gotrix Jundiaí</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+.produto-hero {
+  padding: 140px clamp(20px, 5vw, 72px) 40px;
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: clamp(30px, 5vw, 70px);
+  align-items: center;
+  max-width: 1280px; margin: 0 auto;
+  min-height: 88svh;
+}
+.p-media {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 380px;
+}
+.p-media .glow {
+  position: absolute; inset: 20% 10%;
+  background: radial-gradient(ellipse at center, var(--volt-dim), transparent 65%);
+  filter: blur(40px);
+}
+.p-media .bg-word {
+  position: absolute;
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(4rem, 12vw, 10rem);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.07);
+  text-transform: uppercase; white-space: nowrap;
+  pointer-events: none;
+}
+.p-media img {
+  position: relative; max-height: 460px; object-fit: contain;
+  filter: drop-shadow(0 40px 60px rgba(0,0,0,0.6));
+}
+.p-media .ph {
+  position: relative;
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 3rem; text-transform: uppercase;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.2);
+}
+.p-info .cat-line {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 14px; display: block;
+}
+.p-info h1 {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  text-transform: uppercase; line-height: 1;
+}
+.p-info .desc { color: var(--muted); margin: 20px 0 28px; max-width: 480px; }
+.p-preco {
+  display: flex; align-items: baseline; gap: 14px;
+  margin: 26px 0;
+  padding: 22px 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  width: fit-content;
+}
+.p-preco small { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.p-preco b {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  color: var(--volt);
+  font-variant-numeric: tabular-nums;
+}
+.p-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.recursos-sec { border-top: 1px solid var(--line); }
+.recursos-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px; margin-top: 40px;
+}
+.recurso {
+  font-family: var(--font-mono); font-size: 0.78rem;
+  padding: 15px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: flex; align-items: center; gap: 12px;
+  color: var(--txt);
+}
+.recurso::before { content: "▸"; color: var(--volt); }
+
+.relacionados-sec { border-top: 1px solid var(--line); }
+
+@media (max-width: 900px) {
+  .produto-hero { grid-template-columns: 1fr; min-height: auto; padding-top: 110px; }
+  .p-media { min-height: 280px; order: -1; }
+  .p-media img { max-height: 300px; }
+}
+</style>
+</head>
+<body data-page="veiculos">
+
+<main>
+  <section class="produto-hero" id="pHero"></section>
+
+  <section class="section recursos-sec">
+    <div class="container">
+      <span class="eyebrow reveal">Equipamentos</span>
+      <h2 class="h-display reveal" style="font-size: clamp(1.6rem, 3.6vw, 2.6rem);">O que vem <span class="volt">de série</span></h2>
+      <div class="recursos-grid" id="recursos"></div>
+    </div>
+  </section>
+
+  <section class="section relacionados-sec">
+    <div class="container">
+      <span class="eyebrow reveal">Veja também</span>
+      <h2 class="h-display reveal" style="font-size: clamp(1.6rem, 3.6vw, 2.6rem);">Da mesma <span class="volt">linha</span></h2>
+      <div class="grid-produtos" id="relacionados"></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/vendor/gsap.min.js"></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+const id = new URLSearchParams(location.search).get("id");
+const p = getProduto(id) || PRODUTOS[0];
+document.title = `${p.nome} | Gotrix Jundiaí`;
+
+const media = p.img
+  ? `<img src="${p.img}" alt="${p.nome}" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.nome}</span>'">`
+  : `<span class="ph">${p.nome}</span>`;
+
+document.getElementById("pHero").innerHTML = `
+  <div class="p-media reveal">
+    <div class="glow"></div>
+    <div class="bg-word">${p.categoria}</div>
+    ${media}
+  </div>
+  <div class="p-info">
+    <span class="cat-line reveal">${p.categoria} · ${p.cnh ? "Exige CNH" : "Não exige CNH"}${p.tag ? " · " + p.tag : ""}</span>
+    <h1 class="reveal">${p.nome}</h1>
+    <p class="desc reveal">${p.desc}</p>
+    <div class="hud reveal">
+      <div class="hud-chip"><b>${p.velocidade}</b><small>km/h</small></div>
+      <div class="hud-chip"><b>${p.autonomia}</b><small>km autonomia</small></div>
+      <div class="hud-chip"><b>${p.potencia}</b><small>watts</small></div>
+      <div class="hud-chip"><b>${p.lugares}</b><small>lugar${p.lugares > 1 ? "es" : ""}</small></div>
+    </div>
+    <div class="p-preco reveal">
+      <small>A partir de</small>
+      <b>${formatPreco(p.preco)}</b>
+    </div>
+    <div class="p-ctas reveal">
+      <a class="btn btn-volt" href="${whatsLink(p)}" target="_blank" rel="noopener" data-origem="produto" data-produto="${p.id}">Quero essa no WhatsApp</a>
+      <a class="btn btn-ghost" href="comparador.html?a=${p.id}">Comparar modelo</a>
+    </div>
+  </div>`;
+
+document.getElementById("recursos").innerHTML =
+  p.recursos.map(r => `<div class="recurso reveal">${r}</div>`).join("");
+
+const rel = PRODUTOS.filter(x => x.categoria === p.categoria && x.id !== p.id).slice(0, 3);
+document.getElementById("relacionados").innerHTML = rel.map(cardHTML).join("");
+
+// sticky mobile mostra o modelo específico
+document.addEventListener("gtx:ready", () => {
+  const sticky = document.querySelector(".sticky-cta .btn");
+  if (sticky) {
+    sticky.href = whatsLink(p);
+    sticky.textContent = "Quero a " + p.nome.replace(/Scooter |Bike Elétrica |Bike |Triciclo Elétrico |Patinete Elétrico /i, "");
+    sticky.dataset.produto = p.id;
+  }
+});
+</script>
+</body>
+</html>

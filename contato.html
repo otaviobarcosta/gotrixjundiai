@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contato | Gotrix Jundiaí</title>
+<meta name="description" content="Fale com a Gotrix Jundiaí. Atendimento por WhatsApp, endereço da loja e horários.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+.page-hero { padding: 150px clamp(20px, 5vw, 72px) 40px; }
+.canais {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px; margin-top: 50px;
+}
+.canal {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 30px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: border-color 0.3s, transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+}
+.canal:hover { transform: translateY(-6px); border-color: rgba(255,212,0,0.4); }
+.canal .k {
+  font-family: var(--font-mono); font-size: 0.66rem;
+  letter-spacing: 0.28em; text-transform: uppercase; color: var(--volt);
+}
+.canal h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; text-transform: uppercase; }
+.canal p { color: var(--muted); font-size: 0.9rem; }
+.canal .go { margin-top: auto; font-family: var(--font-mono); font-size: 0.72rem; color: var(--volt); letter-spacing: 0.1em; }
+.horarios {
+  margin-top: 50px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 34px;
+  font-family: var(--font-mono);
+  max-width: 560px;
+}
+.horarios .row {
+  display: flex; justify-content: space-between;
+  padding: 13px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.82rem;
+}
+.horarios .row:last-child { border: none; }
+.horarios .row b { color: var(--volt); }
+</style>
+</head>
+<body data-page="contato">
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow reveal">Contato</span>
+      <h1 class="h-display reveal">Bora <span class="volt">conversar?</span></h1>
+      <p class="lead reveal">Tira dúvida, pede orçamento ou agenda um test ride. A gente responde rápido.</p>
+
+      <div class="canais">
+        <a class="canal reveal js-whats" href="#" target="_blank" rel="noopener" data-origem="contato">
+          <span class="k">Resposta rápida</span>
+          <h3>WhatsApp</h3>
+          <p>O jeito mais rápido de falar com a loja. Orçamento, dúvidas e agendamento de test ride.</p>
+          <span class="go">Abrir conversa →</span>
+        </a>
+        <a class="canal reveal" href="https://www.instagram.com/gotrixoficial" target="_blank" rel="noopener">
+          <span class="k">Novidades</span>
+          <h3>Instagram</h3>
+          <p>Lançamentos, bastidores da loja e clientes rodando por Jundiaí.</p>
+          <span class="go">Seguir →</span>
+        </a>
+        <div class="canal reveal" id="local">
+          <span class="k">Loja física</span>
+          <h3>Endereço</h3>
+          <p>Rua Exemplo, 000 · Centro<br>Jundiaí, SP</p>
+          <span class="go">Venha nos visitar</span>
+        </div>
+      </div>
+
+      <div class="horarios reveal">
+        <div class="row"><span>Segunda a sexta</span><b>09H às 18H</b></div>
+        <div class="row"><span>Sábado</span><b>09H às 14H</b></div>
+        <div class="row"><span>Domingo</span><b>FECHADO</b></div>
+        <div class="row"><span>Test ride</span><b>SOB AGENDAMENTO</b></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/vendor/gsap.min.js"></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.querySelectorAll(".js-whats").forEach(a => { a.href = whatsLink(); });
+</script>
+</body>
+</html>

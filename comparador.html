@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparador | Gotrix Jundiaí</title>
+<meta name="description" content="Compare lado a lado os veículos elétricos Gotrix: velocidade, autonomia, potência e preço.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+.page-hero { padding: 150px clamp(20px, 5vw, 72px) 30px; }
+.comp-selects {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-top: 40px;
+}
+.comp-selects select {
+  width: 100%;
+  font-family: var(--font-mono); font-size: 0.8rem;
+  padding: 15px 16px;
+  background: var(--surface);
+  color: var(--txt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.comp-selects select:focus { outline: none; border-color: var(--volt); }
+.comp-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-top: 26px;
+}
+.comp-col {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.comp-col.vazia {
+  align-items: center; justify-content: center;
+  color: var(--muted);
+  font-family: var(--font-mono); font-size: 0.74rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  min-height: 320px;
+  border-style: dashed;
+}
+.comp-col .media { height: 130px; display: flex; align-items: center; justify-content: center; }
+.comp-col .media img { max-height: 100%; object-fit: contain; filter: drop-shadow(0 14px 22px rgba(0,0,0,0.5)); }
+.comp-col .media .ph {
+  font-family: var(--font-display); font-weight: 900; font-size: 1.6rem;
+  color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+  text-transform: uppercase;
+}
+.comp-col h3 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 1.05rem; text-transform: uppercase;
+  text-align: center; line-height: 1.15;
+}
+.spec-bar { display: flex; flex-direction: column; gap: 6px; }
+.spec-bar label {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 0.66rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.spec-bar label b { color: var(--txt); }
+.spec-bar .track { height: 4px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.spec-bar .fill {
+  height: 100%; width: 0%;
+  background: var(--volt);
+  box-shadow: 0 0 8px var(--volt-glow);
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.comp-col .preco-final {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.comp-col .preco-final small { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
+.comp-col .preco-final b { font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; color: var(--volt); }
+.comp-col .btn { width: 100%; justify-content: center; padding: 14px 20px; font-size: 0.72rem; }
+.comp-col .cnh-line {
+  font-family: var(--font-mono); font-size: 0.66rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  text-align: center; color: var(--muted);
+}
+@media (max-width: 900px) {
+  .comp-selects, .comp-grid { grid-template-columns: 1fr; }
+  .comp-col.vazia { min-height: 120px; }
+}
+</style>
+</head>
+<body data-page="comparador">
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow reveal">Ferramenta</span>
+      <h1 class="h-display reveal">Compare até <span class="volt">3 modelos</span></h1>
+      <p class="lead reveal">Escolha os veículos e veja lado a lado velocidade, autonomia, potência e preço.</p>
+      <div class="comp-selects reveal">
+        <select id="s0"><option value="">Escolher modelo 1</option></select>
+        <select id="s1"><option value="">Escolher modelo 2</option></select>
+        <select id="s2"><option value="">Escolher modelo 3</option></select>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 10px;">
+    <div class="container">
+      <div class="comp-grid" id="compGrid"></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/vendor/gsap.min.js"></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+const MAX = { velocidade: 75, autonomia: 100, potencia: 3000 };
+const selects = [0, 1, 2].map(i => document.getElementById("s" + i));
+const compGrid = document.getElementById("compGrid");
+
+selects.forEach(s => {
+  PRODUTOS.forEach(p => {
+    const o = document.createElement("option");
+    o.value = p.id;
+    o.textContent = `${p.nome} · ${formatPreco(p.preco)}`;
+    s.appendChild(o);
+  });
+  s.addEventListener("change", render);
+});
+
+function colHTML(p) {
+  if (!p) return `<div class="comp-col vazia">Selecione um modelo acima</div>`;
+  const media = p.img
+    ? `<img src="${p.img}" alt="${p.nome}" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.categoria}</span>'">`
+    : `<span class="ph">${p.categoria}</span>`;
+  const bar = (label, val, max, unit) => `
+    <div class="spec-bar">
+      <label><span>${label}</span><b>${val} ${unit}</b></label>
+      <div class="track"><div class="fill" data-w="${(val / max) * 100}"></div></div>
+    </div>`;
+  return `
+  <div class="comp-col">
+    <div class="media">${media}</div>
+    <h3>${p.nome}</h3>
+    <span class="cnh-line">${p.cnh ? "Exige CNH" : "Não exige CNH"} · ${p.lugares} lugar${p.lugares > 1 ? "es" : ""}</span>
+    ${bar("Velocidade", p.velocidade, MAX.velocidade, "km/h")}
+    ${bar("Autonomia", p.autonomia, MAX.autonomia, "km")}
+    ${bar("Potência", p.potencia, MAX.potencia, "W")}
+    <div class="preco-final">
+      <small>A partir de</small>
+      <b>${formatPreco(p.preco)}</b>
+    </div>
+    <a class="btn btn-volt" href="${whatsLink(p)}" target="_blank" rel="noopener" data-origem="comparador" data-produto="${p.id}">Quero essa</a>
+  </div>`;
+}
+
+function render() {
+  compGrid.innerHTML = selects.map(s => colHTML(getProduto(s.value))).join("");
+  requestAnimationFrame(() => {
+    compGrid.querySelectorAll(".fill").forEach(f => { f.style.width = f.dataset.w + "%"; });
+  });
+}
+
+// pré-seleção via URL ?a= &b=
+const params = new URLSearchParams(location.search);
+["a", "b", "c"].forEach((k, i) => {
+  const v = params.get(k);
+  if (v && getProduto(v)) selects[i].value = v;
+});
+render();
+</script>
+</body>
+</html>

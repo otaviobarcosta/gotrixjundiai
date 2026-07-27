@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veículos | Gotrix Jundiaí</title>
+<meta name="description" content="Catálogo completo Gotrix Jundiaí: scooters elétricas, bikes, triciclos e patinetes. Compare specs e preços e fale direto no WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+.page-hero { padding: 150px clamp(20px, 5vw, 72px) 20px; }
+.count-line {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: var(--muted); letter-spacing: 0.15em;
+  margin-top: 22px;
+}
+.count-line b { color: var(--volt); }
+</style>
+</head>
+<body data-page="veiculos">
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow reveal">Catálogo</span>
+      <h1 class="h-display reveal">Todos os <span class="volt">veículos</span></h1>
+      <p class="lead reveal">Specs reais, preço na tela e zero enrolação. Clicou, gostou, chama no WhatsApp.</p>
+      <div class="filtros reveal" id="filtros">
+        <button class="filtro-btn active" data-f="all">Todos</button>
+        <button class="filtro-btn" data-f="Scooter">Scooters</button>
+        <button class="filtro-btn" data-f="Bike">Bikes</button>
+        <button class="filtro-btn" data-f="Triciclo">Triciclos</button>
+        <button class="filtro-btn" data-f="Patinete">Patinetes</button>
+      </div>
+      <div class="count-line" id="countLine"></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 24px;">
+    <div class="container">
+      <div class="grid-produtos" id="grid"></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/vendor/gsap.min.js"></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+const grid = document.getElementById("grid");
+const countLine = document.getElementById("countLine");
+const btns = document.querySelectorAll(".filtro-btn");
+
+function render(f) {
+  const lista = f === "all" ? PRODUTOS : PRODUTOS.filter(p => p.categoria === f);
+  grid.innerHTML = lista.map(cardHTML).join("");
+  countLine.innerHTML = `<b>${String(lista.length).padStart(2, "0")}</b> MODELOS ENCONTRADOS`;
+  grid.querySelectorAll(".reveal").forEach(el => {
+    el.style.opacity = 1; el.style.transform = "none";
+  });
+  if (typeof gsap !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    gsap.from(grid.children, {
+      opacity: 0, y: 26, duration: 0.6,
+      stagger: 0.05, ease: "power2.out", clearProps: "all"
+    });
+  }
+}
+
+btns.forEach(b => b.addEventListener("click", () => {
+  btns.forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  render(b.dataset.f);
+}));
+
+// filtro via URL ?cat=
+const cat = new URLSearchParams(location.search).get("cat");
+const inicial = [...btns].find(b => b.dataset.f === cat);
+if (inicial) { btns.forEach(x => x.classList.remove("active")); inicial.classList.add("active"); }
+render(inicial ? cat : "all");
+</script>
+</body>
+</html>
