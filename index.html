@@ -14,7 +14,8 @@
 .stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
 .stats .container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 28px; }
 .stat b { font-family: var(--font-display); font-weight: 900; font-size: clamp(2rem, 4vw, 3.2rem); color: var(--volt); font-variant-numeric: tabular-nums; display: block; }
-.stat span { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.stat b span { font: inherit; color: inherit; letter-spacing: inherit; text-transform: none; }
+.stat > span { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
 
 /* bloco sem CNH */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 6vw, 80px); align-items: center; }
@@ -49,7 +50,7 @@
   <!-- DOBRA 1: HERO PARALLAX -->
   <section class="hp-section" id="hpSection">
     <div class="hp-header">
-      <span class="eyebrow">Gotrix Jundiaí · Loja oficial</span>
+      <span class="badge-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Gotrix Jundiaí · Loja Oficial</span>
       <h1>O futuro anda<br>em <span class="volt">silêncio.</span></h1>
       <p class="lead">Scooters, bikes e triciclos elétricos com garantia, suporte na loja e modelos que dispensam CNH. Venha ver de perto em Jundiaí.</p>
       <div class="hp-ctas">
@@ -68,7 +69,6 @@
   <!-- DOBRA 2: TÍTULO ROTATIVO + CATEGORIAS -->
   <section class="section" id="linhas">
     <div class="container">
-      <span class="eyebrow reveal">Linhas</span>
       <h2 class="rot-title reveal">Escolha o seu
         <span class="rot-line" id="rotLine">
           <span class="rot-word">elétrico.</span>
@@ -87,39 +87,13 @@
           Falar com a loja
         </a>
       </div>
-      <div class="cats-grid">
-        <a href="veiculos.html?cat=Scooter" class="cat-card reveal">
-          <span class="num">06 modelos</span>
-          <h3>Scooters</h3>
-          <p>De 32 a 75 km/h. Com e sem exigência de CNH.</p>
-          <span class="go">Explorar →</span>
-        </a>
-        <a href="veiculos.html?cat=Bike" class="cat-card reveal">
-          <span class="num">06 modelos</span>
-          <h3>Bikes elétricas</h3>
-          <p>Pedal assistido, câmbio Shimano e até 100 km de autonomia.</p>
-          <span class="go">Explorar →</span>
-        </a>
-        <a href="veiculos.html?cat=Triciclo" class="cat-card reveal">
-          <span class="num">03 modelos</span>
-          <h3>Triciclos</h3>
-          <p>Estabilidade total, baú e opções adaptáveis para PCD.</p>
-          <span class="go">Explorar →</span>
-        </a>
-        <a href="veiculos.html?cat=Patinete" class="cat-card reveal">
-          <span class="num">01 modelo</span>
-          <h3>Patinetes</h3>
-          <p>A porta de entrada da mobilidade elétrica.</p>
-          <span class="go">Explorar →</span>
-        </a>
-      </div>
+      <div class="cats-grid" id="folderGrid"></div>
     </div>
   </section>
 
   <!-- DOBRA 3: CARD STACK -->
   <section class="section" style="padding-top: 0;">
     <div class="container">
-      <span class="eyebrow reveal">Destaques</span>
       <h2 class="h-display reveal">Os mais <span class="volt">procurados</span></h2>
       <div class="stack-wrap reveal">
         <div class="stack-stage" id="stackStage" tabindex="0" aria-label="Carrossel de veículos em destaque"></div>
@@ -147,7 +121,7 @@
   <section class="section">
     <div class="container split">
       <div>
-        <span class="eyebrow reveal">Sem burocracia</span>
+        <span class="badge-pill reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>100% sem burocracia</span>
         <h2 class="h-display reveal">Anda sem CNH.<br>Sem placa. <span class="volt">Sem gasolina.</span></h2>
         <p class="lead reveal">Boa parte da linha Gotrix é autopropelida: até 32 km/h, dispensa habilitação e emplacamento. Você carrega a bateria em casa, numa tomada comum, e roda a semana inteira por centavos.</p>
         <div class="sec-ctas reveal">
@@ -168,7 +142,7 @@
   <!-- CTA FINAL -->
   <section class="section final-cta">
     <div class="container">
-      <span class="eyebrow reveal" style="justify-content: center;">Jundiaí e região</span>
+      <span class="badge-pill reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>Jundiaí e Região</span>
       <h2 class="h-display reveal">Vem fazer um<br><span class="volt">test ride.</span></h2>
       <p class="lead reveal" style="margin-left: auto; margin-right: auto;">Chama a gente no WhatsApp, escolhe o modelo e agenda seu test ride na loja. Sem compromisso.</p>
       <div class="sec-ctas reveal" style="justify-content: center;">
@@ -212,17 +186,19 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
     row.innerHTML = tiles.join("");
   });
 
-  if (!desk || reduce || typeof gsap === "undefined") return;
+  if (reduce || typeof gsap === "undefined") return;
   gsap.registerPlugin(ScrollTrigger);
+  const dx = desk ? 480 : 230;
+  const dy = desk ? 110 : 70;
   const st = { trigger: "#hpSection", start: "top top", end: "bottom top", scrub: 1 };
   const stIn = { trigger: "#hpSection", start: "top top", end: "bottom 55%", scrub: 1 };
   gsap.fromTo("#hpStage",
-    { rotateX: 15, rotateZ: 20, y: -110, opacity: 0.4 },
-    { rotateX: 0, rotateZ: 0, y: 110, opacity: 1, ease: "none", scrollTrigger: stIn });
-  gsap.to("#hpRow1", { x: 480, ease: "none", scrollTrigger: st });
-  gsap.to("#hpRow2", { x: -480, ease: "none", scrollTrigger: st });
-  gsap.to("#hpRow3", { x: 480, ease: "none", scrollTrigger: st });
-  gsap.to("#hpRow4", { x: -480, ease: "none", scrollTrigger: st });
+    { rotateX: 15, rotateZ: 20, y: -dy, opacity: 0.4 },
+    { rotateX: 0, rotateZ: 0, y: dy, opacity: 1, ease: "none", scrollTrigger: stIn });
+  gsap.to("#hpRow1", { x: dx, ease: "none", scrollTrigger: st });
+  gsap.to("#hpRow2", { x: -dx, ease: "none", scrollTrigger: st });
+  gsap.to("#hpRow3", { x: dx, ease: "none", scrollTrigger: st });
+  gsap.to("#hpRow4", { x: -dx, ease: "none", scrollTrigger: st });
 })();
 
 /* ============ 2. PALAVRA ROTATIVA ============ */
@@ -257,6 +233,61 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
       void prox.offsetWidth;
       prox.classList.add("on");
     }, 2000);
+  }
+})();
+
+
+/* ============ 2b. PASTAS 3D DAS CATEGORIAS ============ */
+(function folders() {
+  const CATS = [
+    { cat: "Scooter", titulo: "Scooters", count: "06 modelos · 32 a 75 km/h", ids: ["sport-pro", "x15-pro", "x11-3000"] },
+    { cat: "Bike", titulo: "Bikes elétricas", count: "06 modelos · até 100 km", ids: ["bike-v8", "bike-v8-pro-s", "bike-liberty"] },
+    { cat: "Triciclo", titulo: "Triciclos", count: "03 modelos · baú e PCD", ids: ["triciclo-a3t", "triciclo-x3", "triciclo-u1s"] },
+    { cat: "Patinete", titulo: "Patinetes", count: "01 modelo · entrada", ids: ["patinete-e30"] }
+  ];
+  const grid = document.getElementById("folderGrid");
+  const nomeCurto = n => n.replace(/Scooter |Bike Elétrica |Bike |Triciclo Elétrico |Patinete Elétrico /i, "");
+
+  grid.innerHTML = CATS.map(c => {
+    const minis = c.ids.map((id, i) => {
+      const p = getProduto(id);
+      const solo = c.ids.length === 1 ? " solo" : "";
+      const media = p.img
+        ? `<img src="${p.img}" alt="${p.nome}" loading="lazy" onerror="this.outerHTML='<span class=&quot;f-ph&quot;>${nomeCurto(p.nome)}</span>'">`
+        : `<span class="f-ph">${nomeCurto(p.nome)}</span>`;
+      return `<a class="f-mini${solo}" data-i="${i}" href="produto.html?id=${p.id}" aria-label="${p.nome}">${media}<b>${nomeCurto(p.nome)}</b></a>`;
+    }).join("");
+    return `
+    <div class="folder-card reveal" data-cat="${c.cat}">
+      <span class="f-hint">Passe o mouse</span>
+      <div class="folder-scene">
+        <div class="f-cards">${minis}</div>
+        <div class="f-garage"><div class="f-door"></div></div>
+        <div class="f-floor"></div>
+      </div>
+      <h3>${c.titulo}</h3>
+      <p class="f-count">${c.count}</p>
+      <a class="f-all" href="veiculos.html?cat=${c.cat}">Ver todos →</a>
+    </div>`;
+  }).join("");
+
+  const touch = window.matchMedia("(hover: none)").matches;
+  grid.querySelectorAll(".folder-card").forEach(card => {
+    card.addEventListener("click", e => {
+      // no toque: primeiro tap abre a pasta; links internos navegam normal quando aberta
+      if (touch && !card.classList.contains("open") && !e.target.closest("a")) {
+        grid.querySelectorAll(".folder-card.open").forEach(x => x.classList.remove("open"));
+        card.classList.add("open");
+        return;
+      }
+      // clique no corpo da pasta (fora dos links) vai pro catálogo da categoria
+      if (!e.target.closest("a")) {
+        location.href = "veiculos.html?cat=" + card.dataset.cat;
+      }
+    });
+  });
+  if (touch) {
+    grid.querySelectorAll(".f-hint").forEach(h => h.textContent = "Toque para abrir");
   }
 })();
 
