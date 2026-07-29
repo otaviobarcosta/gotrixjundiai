@@ -141,7 +141,7 @@ selects.forEach(s => {
 function colHTML(p) {
   if (!p) return `<div class="comp-col vazia">Selecione um modelo acima</div>`;
   const media = p.img
-    ? `<img src="${p.img}" alt="${p.nome}" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.categoria}</span>'">`
+    ? imgTag(p, `onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.categoria}</span>'"`)
     : `<span class="ph">${p.categoria}</span>`;
   const bar = (label, val, max, unit) => `
     <div class="spec-bar">

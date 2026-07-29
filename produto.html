@@ -133,7 +133,7 @@ const p = getProduto(id) || PRODUTOS[0];
 document.title = `${p.nome} | Gotrix Jundiaí`;
 
 const media = p.img
-  ? `<img src="${p.img}" alt="${p.nome}" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.nome}</span>'">`
+  ? imgTag(p, `onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.nome}</span>'"`)
   : `<span class="ph">${p.nome}</span>`;
 
 document.getElementById("pHero").innerHTML = `
@@ -167,6 +167,7 @@ document.getElementById("recursos").innerHTML =
 
 const rel = PRODUTOS.filter(x => x.categoria === p.categoria && x.id !== p.id).slice(0, 3);
 document.getElementById("relacionados").innerHTML = rel.map(cardHTML).join("");
+if (typeof ativar3D === "function") ativar3D(document.getElementById("relacionados"));
 
 // sticky mobile mostra o modelo específico
 document.addEventListener("gtx:ready", () => {

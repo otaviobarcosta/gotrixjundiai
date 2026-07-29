@@ -26,7 +26,7 @@ const PRODUTOS = [
     velocidade: 75, autonomia: 60, potencia: 3000, lugares: 2,
     preco: 16699.99,
     cnh: true,
-    img: "https://gotrixoficial.com.br/wp-content/uploads/2025/08/SPORT-PRO.png",
+    img: "assets/img/sport-pro.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Buzina", "Modo Ré", "Seta", "Modo Parking", "Bateria removível", "Para-lamas", "Farol de LED", "Retrovisores", "Painel interativo"],
     desc: "A scooter mais rápida da linha. 75 km/h de velocidade máxima com motor de 3000W para quem quer substituir a moto a combustão de vez."
   },
@@ -38,7 +38,7 @@ const PRODUTOS = [
     velocidade: 70, autonomia: 60, potencia: 3000, lugares: 2,
     preco: 15299.99,
     cnh: true,
-    img: "",
+    img: "assets/img/sport-701.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Buzina", "Modo Ré", "Seta", "Modo Parking", "Bateria removível", "Para-lamas", "Farol de LED", "Retrovisores", "Chave reserva", "Painel interativo"],
     desc: "Potência de 3000W e 60 km de autonomia. O equilíbrio perfeito entre desempenho e custo-benefício na categoria ciclomotor."
   },
@@ -50,7 +50,7 @@ const PRODUTOS = [
     velocidade: 70, autonomia: 50, potencia: 3000, lugares: 2,
     preco: 13199.99,
     cnh: true,
-    img: "",
+    img: "assets/img/x11-3000.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Buzina", "Seta", "Tecnologia NFC", "Bateria removível", "Para-lamas", "Farol de LED", "Retrovisores", "Chave reserva", "Porta-objetos", "Painel interativo", "Luz de freio"],
     desc: "A queridinha da linha X11 agora com motor de 3000W. Desbloqueio por NFC, porta-objetos e 70 km/h de velocidade máxima."
   },
@@ -62,7 +62,7 @@ const PRODUTOS = [
     velocidade: 60, autonomia: 40, potencia: 2000, lugares: 2,
     preco: 12299.99,
     cnh: true,
-    img: "",
+    img: "assets/img/x11-2000.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Buzina", "Seta", "Tecnologia NFC", "Bateria removível", "Para-lamas", "Farol de LED", "Retrovisores", "Chave reserva", "Porta-objetos", "Painel interativo", "Luz de freio"],
     desc: "Toda a tecnologia da linha X11 com motor de 2000W. Ideal para o dia a dia urbano com economia máxima."
   },
@@ -74,7 +74,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 40, potencia: 1000, lugares: 2,
     preco: 12799.99,
     cnh: false,
-    img: "",
+    img: "assets/img/x11-1000.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Buzina", "Modo Ré", "Seta", "Tecnologia NFC", "Bateria removível", "Para-lamas", "Farol de LED", "Retrovisores", "Chave reserva", "Pisca-alerta", "Painel interativo"],
     desc: "Dispensa CNH e emplacamento. Autopropelida com visual de scooter grande, NFC e modo ré."
   },
@@ -86,7 +86,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 45, potencia: 1000, lugares: 2,
     preco: 11999.99,
     cnh: false,
-    img: "https://gotrixoficial.com.br/wp-content/uploads/2026/07/X13-PLUS.png",
+    img: "assets/img/x15-pro.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Buzina", "Seta", "Tecnologia NFC", "Bateria removível", "Para-lamas", "Farol de LED", "Retrovisores", "Chave reserva", "Pisca-alerta", "Painel interativo"],
     desc: "Autopropelida sem exigência de CNH com 45 km de autonomia. Porta de entrada perfeita para a mobilidade elétrica."
   },
@@ -100,7 +100,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 50, potencia: 1000, lugares: 2,
     preco: 9999.99,
     cnh: false,
-    img: "https://gotrixoficial.com.br/wp-content/uploads/2025/10/42-4-1.png",
+    img: "assets/img/bike-v8.jpg",
     recursos: ["Pedal assistido", "Acelerador", "Buzina", "Seta", "Bateria removível", "Câmbio Shimano", "Para-lamas", "Farol de LED", "Chave reserva", "Painel interativo"],
     desc: "A bike elétrica mais popular da Gotrix. Câmbio Shimano, pedal assistido e 50 km de autonomia sem precisar de CNH."
   },
@@ -112,7 +112,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 50, potencia: 1000, lugares: 2,
     preco: 10099.99,
     cnh: false,
-    img: "",
+    img: "assets/img/bike-v8-pro.jpg",
     recursos: ["Pedal assistido", "Acelerador", "Alarme integrado", "Buzina", "Seta", "Bateria removível", "Câmbio Shimano", "Para-lamas", "Farol de LED", "Chave reserva", "Painel interativo", "Luz de freio"],
     desc: "A V8 com alarme integrado e luz de freio. Mais segurança para o dia a dia."
   },
@@ -124,7 +124,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 100, potencia: 1000, lugares: 2,
     preco: 11499.99,
     cnh: false,
-    img: "",
+    img: "assets/img/bike-v8-pro-s.jpg",
     recursos: ["Pedal assistido", "Acelerador", "Alarme integrado", "Buzina", "Seta", "Tecnologia NFC", "Bateria removível", "Bluetooth", "Câmbio Shimano", "Para-lamas", "Farol de LED", "Chave reserva", "Painel interativo", "Suporte para cesta"],
     desc: "Duas baterias removíveis, 100 km de autonomia. A campeã de alcance da linha, feita para quem roda o dia inteiro."
   },
@@ -136,7 +136,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 50, potencia: 1000, lugares: 2,
     preco: 9999.99,
     cnh: false,
-    img: "",
+    img: "assets/img/bike-h9.jpg",
     recursos: ["Pedal assistido", "Acelerador", "Buzina", "Seta", "Bateria removível", "Câmbio Shimano", "Para-lamas", "Farol de LED", "Chave reserva", "Painel interativo", "Luz de freio"],
     desc: "Design robusto, câmbio Shimano e luz de freio. Confiabilidade para o trabalho e o lazer."
   },
@@ -148,7 +148,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 50, potencia: 1000, lugares: 2,
     preco: 10699.99,
     cnh: false,
-    img: "",
+    img: "assets/img/bike-q8.jpg",
     recursos: ["Pedal assistido", "Acelerador", "Alarme integrado", "Buzina", "Seta", "Tecnologia NFC", "Bateria removível", "Câmbio Shimano", "Para-lamas", "Farol de LED", "Chave reserva", "Painel interativo", "Suporte para cesta"],
     desc: "NFC, alarme e suporte para cesta. A bike completa para quem carrega o dia junto."
   },
@@ -160,7 +160,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 40, potencia: 750, lugares: 2,
     preco: 8999.99,
     cnh: false,
-    img: "",
+    img: "assets/img/bike-liberty.jpg",
     recursos: ["Dobrável", "Pedal assistido", "Acelerador", "Buzina", "Seta", "Bateria removível", "Câmbio Shimano", "Para-lamas", "Farol de LED", "Chave reserva", "Cesta", "Painel interativo"],
     desc: "Dobra e cabe no porta-malas. A mais acessível da linha, com cesta inclusa e câmbio Shimano."
   },
@@ -174,7 +174,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 50, potencia: 800, lugares: 2,
     preco: 14999.99,
     cnh: false,
-    img: "https://gotrixoficial.com.br/wp-content/uploads/2025/10/02-2.png",
+    img: "assets/img/triciclo-a3t.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Modo Ré", "Seta", "Modo Parking", "Tecnologia NFC", "Bateria removível", "Para-lamas", "Farol de LED", "Retrovisores", "Chave reserva", "Porta-objetos", "Baú", "Porta-bolsa", "Painel interativo", "2 compartimentos de armazenagem"],
     desc: "Estabilidade de três rodas com baú e dois compartimentos. Ideal para entregas e quem busca máxima segurança."
   },
@@ -186,7 +186,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 70, potencia: 1000, lugares: 2,
     preco: 15299.99,
     cnh: false,
-    img: "",
+    img: "assets/img/triciclo-u1s.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Buzina", "Modo Ré", "Seta", "Tecnologia NFC", "Para-lamas", "Farol de LED", "Retrovisores", "Adaptável para PCD", "Banco com regulagem", "Chave reserva", "Cesta", "Painel interativo", "2 compartimentos", "Lanterna e luz de freio"],
     desc: "70 km de autonomia, banco com regulagem e adaptação para PCD. Conforto e alcance de sobra."
   },
@@ -198,7 +198,7 @@ const PRODUTOS = [
     velocidade: 32, autonomia: 50, potencia: 1000, lugares: 3,
     preco: 14599.99,
     cnh: false,
-    img: "",
+    img: "assets/img/triciclo-x3.jpg",
     recursos: ["Acelerador", "Alarme integrado", "Modo Ré", "Seta", "Tecnologia NFC", "Para-lamas", "Farol de LED", "Retrovisores", "Adaptável para PCD", "Chave reserva", "Entrada USB", "Cesta", "Painel interativo", "3 compartimentos de armazenagem"],
     desc: "Três lugares, entrada USB e três compartimentos. O triciclo da família."
   },
@@ -210,7 +210,7 @@ const PRODUTOS = [
     velocidade: 25, autonomia: 25, potencia: 350, lugares: 1,
     preco: 4499.99,
     cnh: false,
-    img: "",
+    img: "assets/img/patinete-e30.jpg",
     recursos: ["Acelerador", "Painel digital", "Para-lamas", "Farol de LED"],
     desc: "Leve, prático e direto ao ponto. O jeito mais acessível de entrar no mundo elétrico."
   }
@@ -226,6 +226,21 @@ function whatsLink(produto) {
     ? `Olá! Vim pelo site da Gotrix Jundiaí e quero saber mais sobre a ${produto.nome} (${formatPreco(produto.preco)}).`
     : "Olá! Vim pelo site da Gotrix Jundiaí e quero conhecer os veículos elétricos.";
   return `https://wa.me/${WHATS_NUMBER}?text=${encodeURIComponent(msg)}&${UTM}`;
+}
+
+// PNG = render recortado (flutua com sombra) | JPG = foto com fundo (preenche o card)
+function ehFoto(url) {
+  return /\.(jpe?g)(\?|$)/i.test(url || "");
+}
+function imgTag(p, extra, mini) {
+  if (!p.img) return "";
+  const fit = ehFoto(p.img) ? "cover" : "contain";
+  // mini = usa a versão leve (400px) em miniaturas e na parede do hero
+  const src = (mini && p.img.startsWith("assets/img/"))
+    ? p.img.replace(/\.jpg$/, "-sm.jpg")
+    : p.img;
+  const carga = mini ? 'loading="eager"' : 'loading="lazy"';
+  return `<img src="${src}" alt="${p.nome}" ${carga} decoding="async" data-fit="${fit}" ${extra || ""}>`;
 }
 
 function getProduto(id) {

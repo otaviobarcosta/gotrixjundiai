@@ -209,7 +209,7 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
   const rows = ["hpRow1", "hpRow2", "hpRow3", "hpRow4"].map(id => document.getElementById(id));
   const tile = p => {
     const media = p.img
-      ? `<img src="${p.img}" alt="${p.nome}" loading="lazy" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.nome}</span>'">`
+      ? imgTag(p, `onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.nome}</span>'"`, true)
       : `<span class="ph">${p.nome}</span>`;
     return `<a class="hp-card" href="produto.html?id=${p.id}">
       <div class="glow"></div>${media}
@@ -217,63 +217,51 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
     </a>`;
   };
   // 4 fileiras x 7 cards, ciclando o catálogo para formar a parede
-  const POR_FILEIRA = 7;
+  const POR_FILEIRA = 5;
+  // modelos com foto entram primeiro, para a parede não ficar cheia de vazios
+  const ordenados = [...PRODUTOS].sort((a, b) => (b.img ? 1 : 0) - (a.img ? 1 : 0));
   rows.forEach((row, r) => {
     const tiles = [];
     for (let c = 0; c < POR_FILEIRA; c++) {
-      tiles.push(tile(PRODUTOS[(r * POR_FILEIRA + c) % PRODUTOS.length]));
+      tiles.push(tile(ordenados[(r * POR_FILEIRA + c) % ordenados.length]));
     }
     row.innerHTML = tiles.join("");
   });
 
   if (reduce || typeof gsap === "undefined") return;
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true, fastScrollEnd: true });
   const dx = desk ? 480 : 230;
   const dy = desk ? 110 : 70;
-  const st = { trigger: "#hpSection", start: "top top", end: "bottom top", scrub: 1 };
-  const stIn = { trigger: "#hpSection", start: "top top", end: "bottom 55%", scrub: 1 };
-  gsap.fromTo("#hpStage",
-    { rotateX: 15, rotateZ: 20, y: -dy, opacity: 0.4 },
-    { rotateX: 0, rotateZ: 0, y: dy, opacity: 1, ease: "none", scrollTrigger: stIn });
-  gsap.to("#hpRow1", { x: dx, ease: "none", scrollTrigger: st });
-  gsap.to("#hpRow2", { x: -dx, ease: "none", scrollTrigger: st });
-  gsap.to("#hpRow3", { x: dx, ease: "none", scrollTrigger: st });
-  gsap.to("#hpRow4", { x: -dx, ease: "none", scrollTrigger: st });
-})();
 
-/* ============ 2. PALAVRA ROTATIVA ============ */
-(function rotator() {
-  const line = document.getElementById("rotLine");
-  const words = [...line.querySelectorAll(".rot-word")];
-  let i = 0;
-  // largura da linha = maior palavra
-  const w = Math.max(...words.map(el => el.offsetWidth));
-  if (w) line.style.minWidth = w + "px";
+  // UMA linha do tempo com UM ScrollTrigger, em vez de 5 separados:
+  // menos trabalho por quadro e sincronia perfeita entre palco e fileiras.
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#hpSection",
+      start: "top top",
+      end: "bottom top",
+      scrub: 0.8,
+      invalidateOnRefresh: false
+    },
+    defaults: { ease: "none", force3D: true }
+  });
+  tl.fromTo("#hpStage",
+      { rotateX: 15, rotateZ: 20, y: -dy, opacity: 0.4 },
+      { rotateX: 0, rotateZ: 0, y: dy, opacity: 1, duration: 0.55 }, 0)
+    .to("#hpRow1", { x: dx, duration: 1 }, 0)
+    .to("#hpRow2", { x: -dx, duration: 1 }, 0)
+    .to("#hpRow3", { x: dx, duration: 1 }, 0)
+    .to("#hpRow4", { x: -dx, duration: 1 }, 0);
 
-  if (typeof gsap !== "undefined" && !reduce) {
-    gsap.set(words[0], { yPercent: 0, y: 0, opacity: 1 });
-    words.slice(1).forEach(el => gsap.set(el, { yPercent: 110, y: 0, opacity: 0 }));
-    setInterval(() => {
-      const atual = words[i];
-      i = (i + 1) % words.length;
-      const prox = words[i];
-      gsap.to(atual, { yPercent: -110, opacity: 0, duration: 0.55, ease: "power2.in" });
-      gsap.fromTo(prox, { yPercent: 110, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.75, ease: "back.out(1.4)", delay: 0.12 });
-    }, 2000);
-  } else {
-    line.classList.add("rot-fallback");
-    words[0].classList.add("on");
-    setInterval(() => {
-      words[i].classList.remove("on");
-      words[i].classList.add("off-up");
-      i = (i + 1) % words.length;
-      const prox = words[i];
-      prox.classList.remove("off-up");
-      void prox.offsetWidth;
-      prox.classList.add("on");
-    }, 2000);
-  }
+  // solta as dicas de camada quando a dobra sai da tela
+  ScrollTrigger.create({
+    trigger: "#hpSection", start: "top bottom", end: "bottom top",
+    onToggle: self => {
+      const st = document.getElementById("hpStage");
+      st.style.willChange = self.isActive ? "transform" : "auto";
+    }
+  });
 })();
 
 
@@ -282,7 +270,7 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
   const CATS = [
     { cat: "Scooter", titulo: "Scooters", count: "06 modelos · 32 a 75 km/h", ids: ["sport-pro", "x15-pro", "x11-3000"] },
     { cat: "Bike", titulo: "Bikes elétricas", count: "06 modelos · até 100 km", ids: ["bike-v8", "bike-v8-pro-s", "bike-liberty"] },
-    { cat: "Triciclo", titulo: "Triciclos", count: "03 modelos · baú e PCD", ids: ["triciclo-a3t", "triciclo-x3", "triciclo-u1s"] },
+    { cat: "Triciclo", titulo: "Triciclos", count: "03 modelos · baú e PCD", ids: ["triciclo-u1s", "triciclo-x3", "triciclo-a3t"] },
     { cat: "Patinete", titulo: "Patinetes", count: "01 modelo · entrada", ids: ["patinete-e30"] }
   ];
   const grid = document.getElementById("folderGrid");
@@ -293,7 +281,7 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
       const p = getProduto(id);
       const solo = c.ids.length === 1 ? " solo" : "";
       const media = p.img
-        ? `<img src="${p.img}" alt="${p.nome}" loading="lazy" onerror="this.outerHTML='<span class=&quot;f-ph&quot;>${nomeCurto(p.nome)}</span>'">`
+        ? imgTag(p, `onerror="this.outerHTML='<span class=&quot;f-ph&quot;>${nomeCurto(p.nome)}</span>'"`, true)
         : `<span class="f-ph">${nomeCurto(p.nome)}</span>`;
       return `<a class="f-mini${solo}" data-i="${i}" href="produto.html?id=${p.id}" aria-label="${p.nome}">${media}<b>${nomeCurto(p.nome)}</b></a>`;
     }).join("");
@@ -331,9 +319,45 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
   }
 })();
 
+/* ============ 2. PALAVRA ROTATIVA ============ */
+(function rotator() {
+  const line = document.getElementById("rotLine");
+  if (!line) return;
+  const words = [...line.querySelectorAll(".rot-word")];
+  if (!words.length) return;
+  let i = 0;
+  const w = Math.max(...words.map(el => el.offsetWidth));
+  if (w) line.style.minWidth = w + "px";
+
+  if (typeof gsap !== "undefined" && !reduce) {
+    gsap.set(words[0], { yPercent: 0, y: 0, opacity: 1 });
+    words.slice(1).forEach(el => gsap.set(el, { yPercent: 110, y: 0, opacity: 0 }));
+    setInterval(() => {
+      const atual = words[i];
+      i = (i + 1) % words.length;
+      const prox = words[i];
+      gsap.to(atual, { yPercent: -110, opacity: 0, duration: 0.55, ease: "power2.in" });
+      gsap.fromTo(prox, { yPercent: 110, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.75, ease: "back.out(1.4)", delay: 0.12 });
+    }, 2000);
+  } else {
+    line.classList.add("rot-fallback");
+    words[0].classList.add("on");
+    setInterval(() => {
+      words[i].classList.remove("on");
+      words[i].classList.add("off-up");
+      i = (i + 1) % words.length;
+      const prox = words[i];
+      prox.classList.remove("off-up");
+      void prox.offsetWidth;
+      prox.classList.add("on");
+    }, 2000);
+  }
+})();
+
 /* ============ 3. CARD STACK (LEQUE) ============ */
 (function cardStack() {
-  const IDS = ["sport-pro", "x15-pro", "bike-v8", "triciclo-a3t", "patinete-e30"];
+  const IDS = ["sport-pro", "x15-pro", "bike-v8", "triciclo-u1s", "patinete-e30"];
   const items = IDS.map(getProduto).filter(Boolean);
   const stage = document.getElementById("stackStage");
   const dotsBox = document.getElementById("stackDots");
@@ -347,7 +371,7 @@ const desk = window.matchMedia("(min-width: 821px)").matches;
 
   stage.innerHTML = items.map((p, idx) => {
     const media = p.img
-      ? `<img src="${p.img}" alt="${p.nome}" draggable="false" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.nome}</span>'">`
+      ? imgTag(p, `draggable="false" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.nome}</span>'"`)
       : `<span class="ph">${p.nome}</span>`;
     return `<div class="stack-card" data-i="${idx}">
       <div class="sc-media"><div class="glow"></div>${media}</div>

@@ -103,41 +103,49 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 
 /* ---------- GSAP reveals ---------- */
 document.addEventListener("gtx:ready", () => {
+  const alvos = document.querySelectorAll(".reveal");
+  const contadores = document.querySelectorAll("[data-count]");
+
   if (typeof gsap === "undefined" || reduceMotion) {
-    document.querySelectorAll(".reveal").forEach(el => {
-      el.style.opacity = 1; el.style.transform = "none";
-    });
-    document.querySelectorAll("[data-count]").forEach(el => {
-      el.innerText = parseFloat(el.dataset.count).toLocaleString("pt-BR");
-    });
+    alvos.forEach(el => { el.style.opacity = 1; el.style.transform = "none"; });
+    contadores.forEach(el => { el.innerText = parseFloat(el.dataset.count).toLocaleString("pt-BR"); });
     return;
   }
   gsap.registerPlugin(ScrollTrigger);
-  document.querySelectorAll(".reveal").forEach(el => {
-    gsap.to(el, {
-      opacity: 1, y: 0,
-      duration: 1, ease: "power3.out",
-      scrollTrigger: { trigger: el, start: "top 88%" }
+
+  // Reveals via IntersectionObserver: o navegador avisa quando o elemento
+  // entra na tela, sem checar posição a cada quadro do scroll.
+  const obs = new IntersectionObserver((entradas, o) => {
+    entradas.forEach(e => {
+      if (!e.isIntersecting) return;
+      gsap.to(e.target, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out", overwrite: "auto" });
+      o.unobserve(e.target);
     });
-  });
-  // counters
-  document.querySelectorAll("[data-count]").forEach(el => {
-    const end = parseFloat(el.dataset.count);
-    gsap.fromTo(el, { innerText: 0 }, {
-      innerText: end, duration: 2, ease: "power2.out",
-      snap: { innerText: 1 },
-      scrollTrigger: { trigger: el, start: "top 90%" },
-      onUpdate: function () {
-        el.innerText = Math.floor(this.targets()[0].innerText).toLocaleString("pt-BR");
-      }
+  }, { rootMargin: "0px 0px -12% 0px" });
+  alvos.forEach(el => obs.observe(el));
+
+  // contadores: mesmo mecanismo
+  const obsNum = new IntersectionObserver((entradas, o) => {
+    entradas.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      gsap.fromTo(el, { innerText: 0 }, {
+        innerText: parseFloat(el.dataset.count), duration: 2, ease: "power2.out",
+        snap: { innerText: 1 },
+        onUpdate: function () {
+          el.innerText = Math.floor(this.targets()[0].innerText).toLocaleString("pt-BR");
+        }
+      });
+      o.unobserve(el);
     });
-  });
+  }, { rootMargin: "0px 0px -10% 0px" });
+  contadores.forEach(el => obsNum.observe(el));
 });
 
 /* ---------- render de card de produto ---------- */
 function cardHTML(p) {
   const media = p.img
-    ? `<img src="${p.img}" alt="${p.nome}" loading="lazy" onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.categoria}</span>'">`
+    ? imgTag(p, `onerror="this.outerHTML='<span class=&quot;ph&quot;>${p.categoria}</span>'"`)
     : `<span class="ph">${p.categoria}</span>`;
   return `
   <article class="card reveal" data-cat="${p.categoria}">
@@ -171,3 +179,58 @@ document.addEventListener("click", e => {
   const a = e.target.closest("a[href*='wa.me']");
   if (a) trackWhats(a.dataset.origem || "site", a.dataset.produto || "geral");
 });
+
+/* ============================================================
+   Cards de produto em 3D (efeito Aceternity, em JS puro)
+   O card acompanha o mouse e as camadas internas ganham
+   profundidade. Chame ativar3D(escopo) depois de renderizar.
+   ============================================================ */
+function ativar3D(escopo) {
+  if (!isDesktop || reduceMotion) return;
+  const raiz = escopo || document;
+  raiz.querySelectorAll(".card:not([data-tilt])").forEach(card => {
+    card.dataset.tilt = "1";
+    // profundidades: foto na frente, preço logo atrás, texto ao fundo
+    const camadas = [
+      [card.querySelector(".card-media"), 34],
+      [card.querySelector(".card-tag"), 20],
+      [card.querySelector("h3")?.parentElement, 14],
+      [card.querySelector(".hud"), 10],
+      [card.querySelector(".preco-row"), 22]
+    ].filter(([el]) => el);
+
+    let raf = null, alvoX = 0, alvoY = 0, atualX = 0, atualY = 0, dentro = false;
+
+    const loop = () => {
+      atualX += (alvoX - atualX) * 0.18;
+      atualY += (alvoY - atualY) * 0.18;
+      card.style.transform =
+        `perspective(1100px) translateY(${dentro ? -5 : 0}px) ` +
+        `rotateY(${atualX.toFixed(2)}deg) rotateX(${atualY.toFixed(2)}deg)`;
+      if (Math.abs(alvoX - atualX) > 0.01 || Math.abs(alvoY - atualY) > 0.01) {
+        raf = requestAnimationFrame(loop);
+      } else { raf = null; }
+    };
+    const anima = () => { if (!raf) raf = requestAnimationFrame(loop); };
+
+    card.addEventListener("mouseenter", () => {
+      dentro = true;
+      card.classList.add("tilt-on");
+      camadas.forEach(([el, z]) => { el.style.transform = `translateZ(${z}px)`; });
+      anima();
+    });
+    card.addEventListener("mousemove", e => {
+      const r = card.getBoundingClientRect();
+      alvoX = (e.clientX - r.left - r.width / 2) / 40;
+      alvoY = -(e.clientY - r.top - r.height / 2) / 40;
+      anima();
+    });
+    card.addEventListener("mouseleave", () => {
+      dentro = false;
+      alvoX = 0; alvoY = 0;
+      card.classList.remove("tilt-on");
+      camadas.forEach(([el]) => { el.style.transform = "translateZ(0px)"; });
+      anima();
+    });
+  });
+}
